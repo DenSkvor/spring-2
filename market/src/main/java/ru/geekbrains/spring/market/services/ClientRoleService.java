@@ -27,7 +27,9 @@ public class ClientRoleService {
         clientRoleRepository.save(new ClientRole(client, role));
     }
 
-    public void upd(Long id, Role newRole){
-        clientRoleRepository.save(new ClientRole(id, findById(id).getClient(), newRole));
+    public ClientRole upd(Long id, Role newRole){
+        ClientRole cr = new ClientRole(id, findById(id).getClient(), newRole);
+        clientRoleRepository.save(cr);
+        return cr;
     }
 }

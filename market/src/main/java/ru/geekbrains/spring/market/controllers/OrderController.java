@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.geekbrains.spring.market.Cart;
+import ru.geekbrains.spring.market.History;
 import ru.geekbrains.spring.market.models.Client;
 import ru.geekbrains.spring.market.models.Order;
 import ru.geekbrains.spring.market.models.OrderItem;
 import ru.geekbrains.spring.market.services.ClientService;
 import ru.geekbrains.spring.market.services.OrderService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -27,9 +27,11 @@ public class OrderController {
     private Cart cart;
     private ClientService clientService;
     private OrderService orderService;
+    private History history;
 
     @GetMapping
     public String showOrderForm(){
+        history.getSessionHistory().add("/oder");
         return "order_form";
     }
 
@@ -39,6 +41,9 @@ public class OrderController {
                                 @RequestParam(required = false) String address){
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("address", address);
+
+        history.getSessionHistory().add("/oder [phoneNumber: " + phoneNumber + " address: " + address + "]");
+
         return "order_form";
     }
 
@@ -48,6 +53,8 @@ public class OrderController {
                             @RequestParam String address){
         model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("address", address);
+
+        history.getSessionHistory().add("/oder/show [phoneNumber: " + phoneNumber + " address: " + address + "]");
 
         return "order";
     }
@@ -63,6 +70,19 @@ public class OrderController {
         Order order = new Order(client, phoneNumber, address, totalCost, orderItems);
 
         orderService.addOrder(order);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (OrderItem oi : orderItems) {
+            sb
+                    .append("(product: ").append(oi.getProduct().getTitle())
+                    .append(" quantity: ").append(oi.getQuantity()).append(")");
+        }
+        sb.append("}");
+        String products = sb.toString();
+        history.getSessionHistory().add("/oder/confirm " +
+                "[name: " + client.getName() + " phoneNumber: " + phoneNumber + " address: " + address + products + " totalCost: " + totalCost + "]");
+
         cart.clear();
 
         return "redirect:/products";

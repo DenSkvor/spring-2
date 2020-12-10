@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.spring.market.History;
 import ru.geekbrains.spring.market.exceptions.ProductNotFoundException;
 import ru.geekbrains.spring.market.models.Product;
 import ru.geekbrains.spring.market.services.CategoryService;
@@ -21,6 +22,7 @@ public class ProductController {
 
     private ProductService productService;
     private CategoryService categoryService;
+    private History history;
 
 
     @GetMapping
@@ -44,42 +46,48 @@ public class ProductController {
         model.addAttribute("productFilter", pf.getFilter());
         model.addAttribute("productCategoryFilter", pf.getCategoryFilter());
 
+        history.getSessionHistory().add("/products");
+
         return "products";
     }
 
     @GetMapping("/add")
     public String showAddProductForm(){
+
+        history.getSessionHistory().add("/products/add");
+
         return "add_product.html";
     }
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute() Product product){
         productService.addProduct(product);
+
+        history.getSessionHistory().add("/products/add [" + "id: " + product.getId() + " title: " + product.getTitle() + " price: " + product.getPrice() + "]");
+
         return "redirect:/products";
     }
 
     @GetMapping("/upd")
     public String showUpdProductForm(Model model,
-                                     @RequestParam(required = false) Long id){
+                                     @RequestParam(required = false) Long id) throws ProductNotFoundException {
         if(id == null) return "redirect:/products";
-        try {
-            model.addAttribute("updProduct", productService.getProductById(id));
-        } catch (ProductNotFoundException e) {
-            e.printStackTrace();
-            return "redirect:/products";
-        }
+        Product product = productService.getProductById(id);
+        model.addAttribute("updProduct", product);
+
+        history.getSessionHistory().add("/products/upd for [" + "id: " + product.getId() + " title: " + product.getTitle() + " price: " + product.getPrice() + "]");
+
         return "upd_product";
     }
 
     @PostMapping("/upd/{id}")
     public String updProduct(@PathVariable() Long id,
                              @RequestParam(required = false) String title,
-                             @RequestParam(required = false) Integer price){
-        try {
-            productService.updProduct(id, title, price);
-        } catch (ProductNotFoundException e) {
-            e.printStackTrace();
-        }
+                             @RequestParam(required = false) Integer price) throws ProductNotFoundException {
+        Product product = productService.updProduct(id, title, price);
+
+        history.getSessionHistory().add("/products/upd to [" + "id: " + product.getId() + " title: " + product.getTitle() + " price: " + product.getPrice() + "]");
+
         return "redirect:/products";
     }
 

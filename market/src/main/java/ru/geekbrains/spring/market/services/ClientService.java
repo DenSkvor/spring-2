@@ -15,6 +15,7 @@ import ru.geekbrains.spring.market.repositories.ClientRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,17 @@ public class ClientService implements UserDetailsService {
 
     public Client findById(Long id){
         return clientRepository.findById(id).get(); //todo переделать на optional or else throw
+    }
+
+    @Transactional
+    public Client updClient(String name, String newName, String newPhoneNumber, String newEmail){
+        Client client = findByName(name);
+
+        if(newName != null && !Objects.equals(newName, client.getName())) client.setName(newName);
+        if(newPhoneNumber != null && !Objects.equals(newPhoneNumber, client.getPhoneNumber())) client.setPhoneNumber(newPhoneNumber);
+        if(newEmail != null && !Objects.equals(newEmail, client.getEmail())) client.setEmail(newEmail);
+
+        return client;
     }
 
     @Override

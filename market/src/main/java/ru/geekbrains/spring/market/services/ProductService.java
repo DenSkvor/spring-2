@@ -29,10 +29,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void updProduct(Long id, String title, Integer price) throws ProductNotFoundException {
+    public Product updProduct(Long id, String title, Integer price) throws ProductNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Попытка обратиться к товару с ID - " + id));
         if (title != null && !title.isEmpty()) product.setTitle(title);
         if (price != null) product.setPrice(price);
+        return product;
     }
 
 }
