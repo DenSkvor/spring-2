@@ -25,7 +25,7 @@ public class HistoryController {
     @GetMapping
     public String showHistory(){
         history.getSessionHistory().add("/history");
-        return "history";
+        return "history_aop";
     }
 
 }
