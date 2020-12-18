@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.geekbrains.spring.market.models.Order;
 import ru.geekbrains.spring.market.repositories.OrderRepository;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class OrderService {
@@ -13,5 +15,9 @@ public class OrderService {
 
     public void addOrder(Order order){
         orderRepository.save(order);
+    }
+
+    public List<Order> findAll(){
+        return orderRepository.findAll();
     }
 }
