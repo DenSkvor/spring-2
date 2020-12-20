@@ -2,9 +2,11 @@ package ru.geekbrains.spring.market;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import ru.geekbrains.spring.market.models.OrderItem;
@@ -17,7 +19,7 @@ import java.util.List;
 
 
 @Component
-@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
 @NoArgsConstructor
 public class Cart {
@@ -27,6 +29,12 @@ public class Cart {
     private Integer totalCost;
     @Value("0")
     private Integer totalQuantity;
+
+    private SimpMessagingTemplate template;
+    @Autowired
+    public void setTemplate(SimpMessagingTemplate template){
+        this.template = template;
+    }
 
     @PostConstruct
     private void init(){
@@ -40,6 +48,9 @@ public class Cart {
                 //calcTotalCost();
                 totalCost += oi.getProductPrice();
                 totalQuantity ++;
+
+                template.convertAndSend("/topic/products", new CartDto(this));
+
                 return;
             }
         }
@@ -47,6 +58,8 @@ public class Cart {
         //calcTotalCost();
         totalCost += p.getPrice();
         totalQuantity ++;
+
+        template.convertAndSend("/topic/products", new CartDto(this));
     }
 
     public void add(Long id){

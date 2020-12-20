@@ -29,7 +29,13 @@
                             <a class="nav-link" th:href="@{/products}">Продукты</a>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'Cart' ? 'active' : ''}">
-                            <a class="nav-link" th:href="@{/cart}" th:text="'Корзина (' + ${@cart.totalQuantity} + ' | ' + ${@cart.totalCost} + ')'"/>
+                            <table id="cart">
+                                <tr>
+                                    <td>
+                                        <a class="nav-link" th:href="@{/cart}" th:text="'Корзина (' + ${@cart.totalQuantity} + ' | ' + ${@cart.totalCost} + ')'"/>
+                                    </td>
+                                </tr>
+                            </table>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'Error' ? '' : ''}"/>
                         <li class="nav-item" th:classappend="${activeTab == 'History' ? 'active' : ''}">

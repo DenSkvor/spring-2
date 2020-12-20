@@ -16,8 +16,8 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LogAspect {
 
     @Autowired

@@ -2,9 +2,7 @@ package ru.geekbrains.spring.market.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.spring.market.Cart;
 import ru.geekbrains.spring.market.History;
 import ru.geekbrains.spring.market.exceptions.ProductNotFoundException;
@@ -73,6 +71,6 @@ public class CartController {
 
         return "cart";
     }
-    
+
 
 }

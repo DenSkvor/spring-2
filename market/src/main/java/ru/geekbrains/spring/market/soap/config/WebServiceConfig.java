@@ -12,8 +12,8 @@ import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 import ru.geekbrains.spring.market.soap.endpoint.OrdersEndpoint;
 
-@EnableWs
-@Configuration
+//@EnableWs
+//@Configuration
 public class WebServiceConfig {
 
     @Bean
