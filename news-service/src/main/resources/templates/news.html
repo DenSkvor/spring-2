@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+
+    <title>Новости</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <div th:replace="~{navigation :: navigation(News)}" />
+    <h1>Новости</h1>
+    <br>
+    <span th:if="${news == null}">Новостей нет</span>
+
+    <table th:if="${news != null}" class="table table-hover">
+        <tbody>
+        <tr>
+            <td th:text="${news}"/>
+        </tr>
+        </tbody>
+    </table>
+
+    <form method="post" th:action="${responseUrl} + '/news'">
+        <input class="form-control" name="totalQuantity" type="hidden" id="totalQuantity" th:value="${totalQuantity}">
+        <input class="form-control" name="totalCost" type="hidden" id="totalCost" th:value="${totalCost}">
+        <button class="btn btn-primary" type="submit">Обновить</button>
+    </form>
+
+</div>
+</body>
+
+</html>

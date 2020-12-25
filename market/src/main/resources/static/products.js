@@ -1,9 +1,9 @@
 var stomp = null;
 
 // подключаемся к серверу по окончании загрузки страницы
-window.onload = function() {
+/*window.onload = function() {
     connect();
-};
+};*/
 
 function connect() {
     var socket = new SockJS('/socket');

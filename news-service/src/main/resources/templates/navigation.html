@@ -20,31 +20,31 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li sec:authorize="hasRole('ADMIN')" class="nav-item" th:classappend="${activeTab == 'Admin' ? 'active' : ''}">
-                            <a class="nav-link" th:href="@{/admin}">Админка</a>
+                            <a class="nav-link" th:href="${responseUrl} + '/admin'">Админка</a>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'Client' ? 'active' : ''}">
-                            <a class="nav-link" th:href="@{/client}">Профиль</a>
+                            <a class="nav-link" th:href="${responseUrl} + '/client'">Профиль</a>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'Products' ? 'active' : ''}">
-                            <a class="nav-link" th:href="@{/products}">Продукты</a>
+                            <a class="nav-link" th:href="${responseUrl} + '/products'">Продукты</a>
                         </li>
-                        <li class="nav-item" th:classappend="${activeTab == 'Cart' ? 'active' : ''}">
+                        <li class="nav-item" classappend="${activeTab == 'Cart' ? 'active' : ''}">
                             <table id="cart">
                                 <tr>
                                     <td>
-                                        <a class="nav-link" th:href="@{/cart}" th:text="'Корзина (' + ${@cart.totalQuantity} + ' | ' + ${@cart.totalCost} + ')'"/>
+                                        <a class="nav-link" th:href="${responseUrl} + '/cart'" th:text="'Корзина (' + ${totalQuantity} + ' | ' + ${totalCost} + ')'"/>
                                     </td>
                                 </tr>
                             </table>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'Error' ? '' : ''}"/>
                         <li class="nav-item" th:classappend="${activeTab == 'History' ? 'active' : ''}">
-                            <a class="nav-link" th:href="@{/history}">История</a>
+                            <a class="nav-link" th:href="${responseUrl} + '/history'">История</a>
                         </li>
                         <li class="nav-item" th:classappend="${activeTab == 'News' ? 'active' : ''}">
                             <form method="post" th:action="${responseUrl} + '/news'">
-                                <input class="form-control" name="totalQuantity" type="hidden" id="totalQuantity" th:value="${@cart.totalQuantity}">
-                                <input class="form-control" name="totalCost" type="hidden" id="totalCost" th:value="${@cart.totalCost}">
+                                <input class="form-control" name="totalQuantity" type="hidden" id="totalQuantity" th:value="${totalQuantity}">
+                                <input class="form-control" name="totalCost" type="hidden" id="totalCost" th:value="${totalCost}">
                                 <button class="nav-link" type="submit">Новости</button>
                             </form>
                         </li>

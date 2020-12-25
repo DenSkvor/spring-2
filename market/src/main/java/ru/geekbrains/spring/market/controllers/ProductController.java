@@ -12,6 +12,7 @@ import ru.geekbrains.spring.market.services.CategoryService;
 import ru.geekbrains.spring.market.services.ProductService;
 import ru.geekbrains.spring.market.utils.ProductFilter;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Map;
 
@@ -24,10 +25,13 @@ public class ProductController {
     private CategoryService categoryService;
     private History history;
 
+    public static String responseUrl;
+
 
     @GetMapping
     public String showProducts(Principal principal,
                                Model model,
+                               HttpServletRequest request,
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "5") Integer pageSize,
                                @RequestParam(required = false) Map<String, String> params
@@ -40,11 +44,14 @@ public class ProductController {
         String clientName = null;
         if(principal != null) clientName = principal.getName();
 
+        responseUrl = "http://localhost:" + request.getHeader("fromPort");
+
         model.addAttribute("clientName", clientName);
         model.addAttribute("products", productService.getProducts(pf.getSpec(), pageNum - 1, pageSize));
         model.addAttribute("categories", categoryService.getCategories());
         model.addAttribute("productFilter", pf.getFilter());
         model.addAttribute("productCategoryFilter", pf.getCategoryFilter());
+        model.addAttribute("responseUrl", responseUrl);
 
         history.getSessionHistory().add("/products");
 
