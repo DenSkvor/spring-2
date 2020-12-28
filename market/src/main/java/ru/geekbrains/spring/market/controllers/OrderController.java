@@ -70,6 +70,7 @@ public class OrderController {
         Order order = new Order(client, phoneNumber, address, totalCost, orderItems);
 
         orderService.addOrder(order);
+        orderService.saveInFile(order);
 
         StringBuilder sb = new StringBuilder();
         sb.append("{");
